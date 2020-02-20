@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29411.108
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CitilinkCr", "CitilinkCr\CitilinkCr.csproj", "{A28C07B4-5C35-4215-A170-0BA2EF5931AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUtils", "WebUtils\WebUtils.csproj", "{58F5C7E3-1335-479C-8B29-D9C9176E4C45}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A28C07B4-5C35-4215-A170-0BA2EF5931AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A28C07B4-5C35-4215-A170-0BA2EF5931AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A28C07B4-5C35-4215-A170-0BA2EF5931AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A28C07B4-5C35-4215-A170-0BA2EF5931AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58F5C7E3-1335-479C-8B29-D9C9176E4C45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58F5C7E3-1335-479C-8B29-D9C9176E4C45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58F5C7E3-1335-479C-8B29-D9C9176E4C45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58F5C7E3-1335-479C-8B29-D9C9176E4C45}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B69DD31F-4089-4485-AA83-C5386C7255B8}
+	EndGlobalSection
+EndGlobal
