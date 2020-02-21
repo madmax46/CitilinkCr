@@ -18,6 +18,8 @@ namespace CitilinkCr
         private readonly Regex regexLiTag;
 
 
+        //?available=0&sorting=name_asc&p=1
+
         // <ul class=\"category-catalog__item\">.*?<\/ul> 
         // <h4>(.*?)</h4> 
         public CrawlerWorker()
@@ -29,14 +31,17 @@ namespace CitilinkCr
             regexLiTag = new Regex("<li>(.*?)</li>", RegexOptions.Singleline);
 
 
-            Parse();
+            var categories = ParseCitilinkCategories();
+
+            ParseAllGoodsFromSubCategories(categories);
+
 
 
             //https://www.citilink.ru/catalog/
         }
 
 
-        public void Parse()
+        public List<CitilinkCategory> ParseCitilinkCategories()
         {
             HttpRequestParameters request = new HttpRequestParameters()
             {
@@ -50,7 +55,7 @@ namespace CitilinkCr
 
 
 
-            List<CitilinkCategory> categoriesList = new List<CitilinkCategory>();
+            var categoriesList = new List<CitilinkCategory>();
 
             foreach (var oneCategory in categories)
             {
@@ -72,9 +77,39 @@ namespace CitilinkCr
                 categoriesList.Add(cat);
             }
 
+
+
+
+            return categoriesList;
         }
 
 
+
+        private void ParseAllGoodsFromSubCategories(List<CitilinkCategory> categories)
+        {
+
+            foreach (var oneCategory in categories)
+            {
+
+                foreach (var subCategory in oneCategory.SubCategories)
+                {
+
+
+                    var request = new HttpRequestParameters()
+                    {
+                        RequestUri = $"{subCategory.Href}?available=0&sorting=name_asc&p=0",
+                        Referrer = "https://www.citilink.ru/"
+                    };
+
+
+                    var page = Web.GetDocumentAsHttpClient(request);
+                }
+
+
+
+
+            }
+        }
 
         private List<string> ParseCategoriesFromPage(string page)
         {
