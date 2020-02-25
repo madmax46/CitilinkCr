@@ -6,17 +6,12 @@ namespace CitilinkCr.Classes
 {
     public class CitilinkCategory
     {
-        public string CategoryName { get; set; }
-        public HrefTag CategoryHref { get; set; }
-        public List<HrefTag> SubCategories { get; set; }
-
-
-        public CitilinkCategory(string categoryName, HrefTag categoryHref)
-        {
-            CategoryName = categoryName;
-            CategoryHref = categoryHref;
-            SubCategories = new List<HrefTag>();
-        }
-
+        public uint Id { get; set; }
+        public string Name { get; set; }
+        public string Link { get; set; }
+        public uint ParseStatus { get; set; }
+        public DateTime LastUpdateDt { get; set; }
+        public uint PagesNumInCategory { get; set; }
+        public uint LastParsedPage { get; set; }
     }
 }

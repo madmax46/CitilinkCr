@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MySqlUtils\MySqlUtils.csproj" />
     <ProjectReference Include="..\WebUtils\WebUtils.csproj" />
   </ItemGroup>
 

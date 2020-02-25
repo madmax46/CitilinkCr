@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 
@@ -53,7 +54,11 @@ namespace WebUtils
         {
             var resBuilder = new StringBuilder();
 
-            var client = new HttpClient();
+            var cookieContainer = new CookieContainer();
+            cookieContainer.Add(new Uri(parameters.RequestUri), new Cookie("_space", "kur_cl%3Akurbryansk"));
+            var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
+
+            var client = new HttpClient(handler);
             if (!string.IsNullOrEmpty(parameters.BaseUrl))
                 client.BaseAddress = new Uri(parameters.BaseUrl);
 
@@ -61,6 +66,7 @@ namespace WebUtils
             client.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134");
             if (!string.IsNullOrEmpty(parameters.Referrer))
                 client.DefaultRequestHeaders.Referrer = new Uri(parameters.Referrer);
+
             var response = client.GetAsync(parameters.RequestUri).Result;
             if (response.IsSuccessStatusCode)
             {
