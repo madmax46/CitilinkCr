@@ -35,7 +35,7 @@ namespace CitilinkCr
             regexClearHttpTags = new Regex("<[^>]*>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
             regExCharacteristic = new Regex("property_name.+?>(?<key>.+?)</span>.+?<td>(?<value>.+?)<", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
             regexLastSeen = new Regex("<div class=\"line-block standart_price out-of-stock_js\" data-last-seen=\"(?<lastseen>.*?)\".*?</div>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
-            regexPrice = new Regex("<div class=\"price price_break\">(?<price>.*?)</div>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            regexPrice = new Regex("<div class=\"product-sidebar__line-box standart_price\">(?<price>.*?)</div>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
             regexPriceInsNum = new Regex("<ins class=\"num\">(?<priceNum>.*?)</ins>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
             characteristicsGroup = new Dictionary<string, uint>();
