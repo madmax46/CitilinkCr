@@ -11,6 +11,10 @@ namespace CitilinkCr.Classes
         public string Group { get; set; }
         public string Name { get; set; }
 
+        public Characteristic()
+        {
+
+        }
         public Characteristic(string group, string name)
         {
             Group = group.Trim();

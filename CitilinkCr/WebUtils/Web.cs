@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using MihaZupan;
 
 namespace WebUtils
 {
@@ -54,11 +55,14 @@ namespace WebUtils
         {
             var resBuilder = new StringBuilder();
 
+            //var proxy = new HttpToSocks5Proxy("145.239.81.69", 1080);
+            //var proxy = new WebProxy(new Uri($"http://proxy-nossl.antizapret.prostovpn.org:29976"));
+
             var cookieContainer = new CookieContainer();
             cookieContainer.Add(new Uri(parameters.RequestUri), new Cookie("_space", "kur_cl%3Akurbryansk"));
-            var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
-
-            var client = new HttpClient(handler);
+            var handler = new HttpClientHandler() { CookieContainer = cookieContainer, /*Proxy = proxy*/ };
+            //handler.DefaultProxyCredentials = CredentialCache.DefaultCredentials;
+            var client = new HttpClient(handler, true);
             if (!string.IsNullOrEmpty(parameters.BaseUrl))
                 client.BaseAddress = new Uri(parameters.BaseUrl);
 
@@ -87,5 +91,17 @@ namespace WebUtils
             return resBuilder.ToString();
         }
 
+
+        public static string LoadTest()
+        {
+            var proxy = new WebProxy(new Uri($"http://91.203.236.226:48975"));
+            var handler = new HttpClientHandler { Proxy = proxy };
+            HttpClient httpClient = new HttpClient(handler, true);
+
+            var result = httpClient.SendAsync(
+                new HttpRequestMessage(HttpMethod.Get, "https://httpbin.org/ip")).Result;
+
+            return result.Content.ReadAsStringAsync().Result;
+        }
     }
 }

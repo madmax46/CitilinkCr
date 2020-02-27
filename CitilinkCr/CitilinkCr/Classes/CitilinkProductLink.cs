@@ -12,6 +12,10 @@ namespace CitilinkCr.Classes
 
         public uint CategoryProduct { get; set; }
         public string Name { get; set; }
+    
+        /// <summary>
+        /// 1 в процессе, 2 - загружено, 3 - ошибка 
+        /// </summary>
         public uint Status { get; set; }
         public DateTime LastUpdate { get; set; }
     }

@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 using CitilinkCr.Classes;
 using MySqlUtils;
 using WebUtils;
@@ -154,7 +155,7 @@ namespace CitilinkCr
                 var pageText = Web.GetDocumentAsHttpClient(request);
 
                 var pagesBlock = regexPagesBlock.Match(pageText);
-                var pagesNum = regexPageLinks.Matches(pagesBlock.Value);
+                var pagesNum = regexPageLinks.Matches(pagesBlock.Value).Cast<Match>().ToList();
                 var currentPage = pagesNum.FirstOrDefault(r => r.Groups[1].Value == "selected");
                 var lastPage = pagesNum.FirstOrDefault(r => r.Groups[1].Value == "last");
 
@@ -203,7 +204,7 @@ namespace CitilinkCr
                 Console.WriteLine($"Сохранили {links.Count} товаров на {clearedSelected} странице из категории {oneCategory.Id} {oneCategory.Name}");
             }
 
-            oneCategory.ParseStatus = oneCategory.PagesNumInCategory == oneCategory.LastParsedPage ? (uint) 2 : (uint) 3;
+            oneCategory.ParseStatus = oneCategory.PagesNumInCategory == oneCategory.LastParsedPage ? (uint)2 : (uint)3;
             UpdateCategoryCrawlerStatus(oneCategory);
 
             Console.WriteLine($"Закончили собирать ссылки из категории {oneCategory.Id} {oneCategory.Name}");
@@ -214,9 +215,6 @@ namespace CitilinkCr
             var allGoods = regexAllGoodsFromPage.Match(page);
 
             var goodsMatches = regexProductAllInfo.Matches(page);
-
-            //var goodsText = regexHrefTag.Matches(allGoods.Groups[1].Value);
-            //var goodsMatchesCleared = goodsText.Where(r => !r.Value.Contains(@"/order/")).ToList();
 
             var products = new List<CitilinkProduct>();
 
@@ -235,21 +233,16 @@ namespace CitilinkCr
                 var title = regexTitle.Match(refToProduct.Value);
                 if (title.Success)
                 {
-                    productLink.Name = System.Web.HttpUtility.HtmlDecode(title.Groups["title"].Value);
+                    productLink.Name = HttpUtility.HtmlDecode(title.Groups["title"].Value);
                     for (int i = 0; i < 3; i++)
-                        productLink.Name = System.Web.HttpUtility.HtmlDecode(productLink.Name);
+                        productLink.Name = HttpUtility.HtmlDecode(productLink.Name);
                 }
                 var citilinkProductId = regexCititlinkProductId.Match(refToProduct.Value);
                 if (citilinkProductId.Success)
                     productLink.CitilinkProductId = Convert.ToUInt32(citilinkProductId.Groups["id"].Value);
 
-
-                //var (isSuccess, tag) = ParseHrefTag(oneProduct.Value);
-                //if (!isSuccess)
-                //    continue;
-
-
-                products.Add(productLink);
+                if (!productLink.Link.Contains("promo"))
+                    products.Add(productLink);
             }
 
             return products;
@@ -257,7 +250,7 @@ namespace CitilinkCr
 
         private List<string> ParseCategoriesFromPage(string page)
         {
-            var matches = regexCategoryCatalog.Matches(page);
+            var matches = regexCategoryCatalog.Matches(page).Cast<Match>().ToList();
             var matchesList = matches.Select(r => r.Groups.Count > 1 ? r.Groups[1].Value : r.Value).ToList();
             return matchesList;
         }
@@ -300,7 +293,7 @@ namespace CitilinkCr
             var values = string.Join(", ",
                 subcategoriesAll.Select(r =>
                     $"({MySqlWrap.ToMySqlParameters(r.Name)},{MySqlWrap.ToMySqlParameters(r.Href)})"));
-            var insertQuery = $"INSERT ignore into citilink_base.categories (name, link) VALUES {values}";
+            var insertQuery = $"INSERT ignore into categories (name, link) VALUES {values}";
 
             mySqlConnection.Execute(insertQuery);
         }
@@ -347,7 +340,7 @@ namespace CitilinkCr
             var values = string.Join(", ",
                 links.Select(r =>
                     $"({MySqlWrap.ToMySqlParameters(r.CitilinkProductId)},{MySqlWrap.ToMySqlParameters(r.Name)},{MySqlWrap.ToMySqlParameters(r.CategoryProduct)},{MySqlWrap.ToMySqlParameters(r.Link)})"));
-            var insertQuery = $"INSERT ignore into citilink_base.products_link (citilink_product_id,name, idCategory, link) VALUES {values}";
+            var insertQuery = $"INSERT ignore into products_link (citilink_product_id,name, idCategory, link) VALUES {values}";
 
             mySqlConnection.Execute(insertQuery);
         }
@@ -356,7 +349,7 @@ namespace CitilinkCr
         private void UpdateCategoryCrawlerStatus(CitilinkCategory category)
         {
             var queryUpdate =
-                $"UPDATE categories SET status = {category.ParseStatus} WHERE id = {category.Id}; ";
+                $"UPDATE categories SET parse_status = {category.ParseStatus} WHERE id = {category.Id}; ";
 
             mySqlConnection.Execute(queryUpdate);
         }

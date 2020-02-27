@@ -9,27 +9,43 @@ namespace CitilinkCr
         {
             MySqlConfig config = new MySqlConfig()
             {
-                Host = "89.208.196.51",
+                Host = "xxx",
                 Port = 3306,
-                UserId = "root",
-                Password = "admin1234",
+                UserId = "IAS14.lyamoPV",
+                Password = "xxx",
                 SslMode = "none",
-                Database = "citilink_base",
+                Database = "IAS14_lyamoPV",
                 CharacterSet = "utf8"
             };
-            var mariaDbWrapper = new MySqlWrap(config);
+            var dbWrapper = new MySqlWrap(config);
 
 
+            Console.WriteLine($"Запустить краулер ссылок - 1, запустить парсер товаров - 2");
+            var decision = Console.ReadLine();
 
-            var crawlerWorker = new CrawlerWorker(mariaDbWrapper);
-            //worker.ParseAndSaveCategories();
-            //worker.StartCrawlingGoods();
+            while (decision != "exit")
+            {
+                switch (decision)
+                {
+                    case "1":
+                        var crawlerWorker = new CrawlerWorker(dbWrapper);
+                        crawlerWorker.ParseAndSaveCategories();
+                        crawlerWorker.StartCrawlingGoods();
+                        break;
 
-            var productsParseWorker = new ProductsParseWorker(mariaDbWrapper);
-            productsParseWorker.Run();
+                    case "2":
+                        var productsParseWorker = new ProductsParseWorker(dbWrapper);
+                        productsParseWorker.Run();
+                        break;
+
+                    default: break;
+                }
+
+                Console.WriteLine($"Запустить краулер ссылок - 1, запустить парсер товаров - 2, выйти - exit");
+                decision = Console.ReadLine();
+            }
 
 
-            Console.Read();
         }
     }
 }
